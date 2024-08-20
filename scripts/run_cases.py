@@ -1,3 +1,4 @@
+import os
 import pathlib
 
 import deepxde as dde
@@ -62,10 +63,84 @@ case_setup = [
         "n_boundary": 1833,
         "loss_weight": 1,
     },
+    {
+        "simulation_name": "Caso_3",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 2,
+        "v_i": 0,
+        "n_domain": 2500,
+        "n_boundary": 500,
+        "loss_weight": 10,
+    },
+    {
+        "simulation_name": "Caso_4",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 5,
+        "v_i": 0,
+        "n_domain": 6250,
+        "n_boundary": 1000,
+        "loss_weight": 10,
+    },
+    {
+        "simulation_name": "Caso_5",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 10,
+        "v_i": 0,
+        "n_domain": 12500,
+        "n_boundary": 1833,
+        "loss_weight": 10,
+    },
+    {
+        "simulation_name": "Caso_6",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 2,
+        "v_i": 0,
+        "n_domain": 2500,
+        "n_boundary": 500,
+        "loss_weight": 100,
+    },
+    {
+        "simulation_name": "Caso_7",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 5,
+        "v_i": 0,
+        "n_domain": 6250,
+        "n_boundary": 1000,
+        "loss_weight": 100,
+    },
+    {
+        "simulation_name": "Caso_8",
+        "rho": 1,
+        "mu": 1,
+        "u_in": 1,
+        "D": 1,
+        "L": 10,
+        "v_i": 0,
+        "n_domain": 12500,
+        "n_boundary": 1833,
+        "loss_weight": 100,
+    },
 ]
 
 
 def main():
+    os.environ["DDE_BACKEND"] = "tensorflow"
+
     for case_dict in case_setup:
         print(f"Starting case {case_dict['simulation_name']}")
         simulation_name = case_dict["simulation_name"]

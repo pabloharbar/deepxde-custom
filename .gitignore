@@ -2,6 +2,7 @@
 out/
 **/*.ckpt.*
 *.rar
+Caso_*
 
 results
 
