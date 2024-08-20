@@ -150,7 +150,7 @@ def main():
         print(f"Finished L-BFGS optimizer case {case_dict['simulation_name']}")
         plot_probes(model, L, simulation_name)
         plot_pressure(model, L, D, mu, rho, u_in, simulation_name)
-        plot_velocity_profile(model, pde, mu, v_i, D, simulation_name)
+        plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name)
         export_results(model, D, L, simulation_name)
         plot_fields(geom, model, L, D, simulation_name)
         print(f"Finished exporting case {case_dict['simulation_name']}")
