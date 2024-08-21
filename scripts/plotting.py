@@ -111,6 +111,10 @@ def plot_pressure(model, L, D, mu, rho, u_in, simulation_name: str):
     print("delta_p/L analytic", Delta_p_L_analytic)
     print("delta_p/L PINN", result[:, 2] / 0.1)
 
+    pd.DataFrame(
+        {"Delta_p_analytic": Delta_p_L_analytic, "Delta_p_PINN": result[:, 2] / 0.1}
+    ).to_csv(f"./{simulation_name}/delta_p.csv")
+
 
 def plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name: str):
     n_points = 1000
@@ -123,8 +127,10 @@ def plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name: str):
     probe_points = np.array([[L / 2 - 0.01, 0], [L / 2 - 0.5, 0]])
     probe_pressao = model.predict(probe_points)
 
-    delta_p = probe_pressao[0, 2] - probe_pressao[1, 2]
-    length = probe_points[0, 0] - probe_points[1, 0]
+    # delta_p = probe_pressao[0, 2] - probe_pressao[1, 2]
+    # length = probe_points[0, 0] - probe_points[1, 0]
+    delta_p = 12
+    length = 1
 
     def u_analytic(x):
         position = x[:, 1] - x[:, 1].min()
@@ -151,6 +157,7 @@ def plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name: str):
     ax.plot(samples[:, 1], u_exact, label="Analytic")
     ax.plot(samples[:, 1], result[:, 0], label="PINN", linestyle="dashed")
     ax.legend()
+    ax.set_ylim([0, 1.5])
     fig.savefig(f"./{simulation_name}/u_profile_comparison.png")
     # fig.show()
 
