@@ -1,18 +1,29 @@
 import os
 import pathlib
-import sys
 
 import deepxde as dde
 import pandas as pd
 from deepxde.config import set_random_seed
 
-from scripts.functions import (create_boundary_inlet, create_boundary_outlet,
-                               create_inlet_u, create_lower_wall,
-                               create_upper_wall, create_wall_u, zero)
+from scripts.functions import (
+    create_boundary_inlet,
+    create_boundary_outlet,
+    create_inlet_u,
+    create_lower_wall,
+    create_upper_wall,
+    create_wall_u,
+    zero,
+)
 from scripts.pde import create_pde
-from scripts.plotting import (export_results, plot_fields, plot_loss_history,
-                              plot_pressure, plot_probes, plot_training_points,
-                              plot_velocity_profile)
+from scripts.plotting import (
+    export_results,
+    plot_fields,
+    plot_loss_history,
+    plot_pressure,
+    plot_probes,
+    plot_training_points,
+    plot_velocity_profile,
+)
 
 dde.config.set_parallel_scaling("weak")  # Nao paralelo
 
@@ -59,7 +70,7 @@ case_setup = [
 ]
 
 
-def main(*args):
+def main():
     os.environ["DDE_BACKEND"] = "tensorflow"
 
     for case_dict in case_setup:
@@ -154,4 +165,4 @@ def main(*args):
 
 
 if __name__ == "__main__":
-    main(s)
+    main()
