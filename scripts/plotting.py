@@ -72,7 +72,7 @@ def plot_probes(model, L, simulation_name: str):
     # fig.show()
 
 
-def plot_pressure(model, L, D, mu, rho, u_in, simulation_name: str):
+def plot_pressure(model, L, D, mu, rho, u_in, v_i, simulation_name: str):
     n_points = 1000
     x2 = np.linspace(-L / 2, L / 2, n_points)
     samples = np.zeros((n_points, 2))
@@ -105,7 +105,8 @@ def plot_pressure(model, L, D, mu, rho, u_in, simulation_name: str):
     Le = 5 * D
     print(Re, Le)
 
-    Delta_p_L_analytic = 12 * u_in * mu / (D**3)
+    # Delta_p_L_analytic = 12 * u_in * mu / (D**2)
+    Delta_p_L_analytic = (u_in * D - v_i * D / 2) * 24 * mu / (D**3 - 3 * D)
     result = model.predict(np.array([[L / 2 - 0.1, 0]]))
 
     print("delta_p/L analytic", Delta_p_L_analytic)
@@ -116,7 +117,7 @@ def plot_pressure(model, L, D, mu, rho, u_in, simulation_name: str):
     ).to_csv(f"./{simulation_name}/delta_p.csv")
 
 
-def plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name: str):
+def plot_velocity_profile(model, pde, mu, u_in, v_i, D, L, simulation_name: str):
     n_points = 1000
     x2 = np.linspace(-D / 2, D / 2, n_points)
     samples = np.zeros((n_points, 2))
@@ -124,12 +125,7 @@ def plot_velocity_profile(model, pde, mu, v_i, D, L, simulation_name: str):
 
     result = model.predict(samples)
 
-    probe_points = np.array([[L / 2 - 0.01, 0], [L / 2 - 0.5, 0]])
-    probe_pressao = model.predict(probe_points)
-
-    # delta_p = probe_pressao[0, 2] - probe_pressao[1, 2]
-    # length = probe_points[0, 0] - probe_points[1, 0]
-    delta_p = 12
+    delta_p = (u_in * D - v_i * D / 2) * 24 * mu / (D**3 - 3 * D)
     length = 1
 
     def u_analytic(x):
