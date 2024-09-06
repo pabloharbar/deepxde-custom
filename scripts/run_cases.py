@@ -1,5 +1,6 @@
 import os
 import pathlib
+import sys
 
 import deepxde as dde
 import pandas as pd
@@ -355,11 +356,19 @@ case_setup = [
 ]
 
 
-def main():
+def main(*args):
     os.environ["DDE_BACKEND"] = "tensorflow"
     set_random_seed(27812)
 
+    args_list = args[0]
+    min_case = int(args_list[0])
+    max_case = int(args_list[-1])
+
     for case_dict in case_setup:
+        case_number = int(case_dict["simulation_name"].replace("Caso_", ""))
+        if case_number < min_case or case_number > max_case:
+            print(f"Skipped case {case_number}")
+            continue
         print(f"Starting case {case_dict['simulation_name']}")
         simulation_name = case_dict["simulation_name"]
         pathlib.Path(f"./{simulation_name}").mkdir(exist_ok=True)
@@ -427,13 +436,13 @@ def main():
         model = dde.Model(data, net)
         # model.compile("adam", lr=1e-3, loss_weights=[1,1,loss_weight,1,1,1,1,1,1,1,1])
         model.compile("adam", lr=1e-3)
-        losshistory, train_state = model.train(iterations=4000, display_every=100)
+        losshistory, train_state = model.train(iterations=10000, display_every=100)
         plot_loss_history(
             losshistory.loss_test, losshistory.steps, simulation_name, "residual_adam"
         )
         print(f"Finished adam optimizer case {case_dict['simulation_name']}")
 
-        dde.optimizers.config.set_LBFGS_options(maxiter=2500)
+        dde.optimizers.config.set_LBFGS_options(maxiter=3000)
         model.compile("L-BFGS")
         losshistory, train_state = model.train(iterations=3000, display_every=100)
         dde.saveplot(losshistory, train_state, issave=False, isplot=False)
@@ -450,4 +459,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
